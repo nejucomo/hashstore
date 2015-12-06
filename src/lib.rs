@@ -14,6 +14,7 @@ mod hashstore;
 mod unival;
 
 /* Library Public API: */
+#[cfg(not(test))]
 pub use hashstore::{
     HashInserter,
     HashStore,
