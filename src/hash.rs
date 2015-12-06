@@ -8,11 +8,6 @@ pub struct Hash([u8; HASH_BYTES]);
 
 
 impl Hash {
-    pub fn unwrap(self) -> [u8; HASH_BYTES]
-    {
-        self.0
-    }
-
     pub fn encoded(&self) -> String
     {
         use super::b64::ToB64;
@@ -55,15 +50,7 @@ impl Hasher {
 mod tests {
     #[allow(non_snake_case)]
     mod Hash {
-        use super::super::{HASH_BYTES, Hash};
-
-        #[test]
-        fn unwrap()
-        {
-            let bytes = [7; HASH_BYTES];
-            let h = Hash(bytes.clone());
-            assert_eq!(bytes, h.unwrap());
-        }
+        use hash::{HASH_BYTES, Hash};
 
         #[test]
         fn encoded()
