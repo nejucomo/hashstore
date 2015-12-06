@@ -1,4 +1,4 @@
-use super::blake2_rfc::blake2b::Blake2b;
+use blake2_rfc::blake2b::Blake2b;
 
 
 const HASH_BYTES: usize = 32;
@@ -10,7 +10,7 @@ pub struct Hash([u8; HASH_BYTES]);
 impl Hash {
     pub fn encoded(&self) -> String
     {
-        use super::b64::ToB64;
+        use b64::ToB64;
 
         self.0.to_b64()
     }
@@ -63,7 +63,7 @@ mod tests {
 
     #[allow(non_snake_case)]
     mod Hasher {
-        use super::super::Hasher;
+        use hash::Hasher;
 
         /* FIXME: Verify test vectors against the reference implementation
          * of blake2.

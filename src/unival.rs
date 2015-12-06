@@ -39,7 +39,7 @@ impl UniqueValue {
 
     pub fn encoded(&self) -> String
     {
-        use super::b64::ToB64;
+        use b64::ToB64;
 
         self.0.to_b64()
     }

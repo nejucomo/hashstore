@@ -23,7 +23,7 @@ impl ToB64 for [u8] {
 
 #[cfg(test)]
 mod tests {
-    use super::ToB64;
+    use b64::ToB64;
 
     #[test]
     fn empty_u8() {

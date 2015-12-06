@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 use std::{fs, io};
-use super::hash::Hash;
-use super::hashspool::HashSpool;
+use hash::Hash;
+use hashspool::HashSpool;
 
 
 pub struct HashStore {
@@ -51,7 +51,7 @@ pub struct HashInserter<'a> {
 impl<'a> HashInserter<'a> {
     fn init(dir: &'a Path) -> io::Result<HashInserter>
     {
-        use super::unival::UniqueValue;
+        use unival::UniqueValue;
 
         let mut pb = PathBuf::new();
         pb.push(dir);
