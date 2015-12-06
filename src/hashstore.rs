@@ -91,3 +91,34 @@ impl<'a> io::Write for HashInserter<'a> {
         self.spool.flush()
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use std::path::Path;
+
+    tests_with_fs! {
+        create_new_dir |path: &Path| {
+            use std::{fs, io};
+            use hashstore::HashStore;
+
+            let exists_as_dir = |p| {
+                match fs::metadata(p) {
+                    Ok(md) => {
+                        md.is_dir()
+                    }
+                    Err(e) => {
+                        assert_eq!(e.kind(), io::ErrorKind::NotFound);
+                        false
+                    }
+                }
+            };
+
+            assert!(!exists_as_dir(path));
+
+            res_unwrap!(HashStore::create(path));
+
+            assert!(exists_as_dir(path));
+        }
+    }
+}
