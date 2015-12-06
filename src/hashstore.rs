@@ -112,6 +112,16 @@ mod tests {
             res_unwrap!(HashStore::create(path));
 
             assert!(exists_as_dir(path));
+        };
+
+        open_non_existent_dir |path: &Path| {
+            use std::io;
+            use hashstore::HashStore;
+
+            let res = HashStore::open(path);
+
+            assert!(res.is_err());
+            assert!(res.err().unwrap().kind() == io::ErrorKind::NotFound);
         }
     }
 }
