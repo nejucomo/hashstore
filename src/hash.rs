@@ -8,8 +8,7 @@ pub struct Hash([u8; HASH_BYTES]);
 
 
 impl Hash {
-    pub fn encoded(&self) -> String
-    {
+    pub fn encoded(&self) -> String {
         use b64::ToB64;
 
         self.0.to_b64()
@@ -20,18 +19,15 @@ impl Hash {
 pub struct Hasher(Blake2b);
 
 impl Hasher {
-    pub fn new() -> Hasher
-    {
+    pub fn new() -> Hasher {
         Hasher(Blake2b::new(HASH_BYTES))
     }
 
-    pub fn update(&mut self, data: &[u8])
-    {
+    pub fn update(&mut self, data: &[u8]) {
         self.0.update(data)
     }
 
-    pub fn finalize(self) -> Hash
-    {
+    pub fn finalize(self) -> Hash {
         // FIXME: find a standard std/core routine for this:
         let mut outbytes = [0; HASH_BYTES];
         let hashout = self.0.finalize();
@@ -53,8 +49,7 @@ mod tests {
         use hash::{HASH_BYTES, Hash};
 
         #[test]
-        fn encoded()
-        {
+        fn encoded() {
             let h = Hash([7; HASH_BYTES]);
             let enc = h.encoded();
             assert_eq!("BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc", enc);
@@ -70,15 +65,13 @@ mod tests {
          */
 
         #[test]
-        fn empty()
-        {
+        fn empty() {
             let henc = Hasher::new().finalize().encoded();
             assert_eq!("DldRwCblQ7Loqy6wYJnaodHl30d3j3eH-qtFzfEv46g", henc);
         }
 
         #[test]
-        fn hello_world()
-        {
+        fn hello_world() {
             let mut hasher = Hasher::new();
             hasher.update(b"Hello World!");
             let henc = hasher.finalize().encoded();

@@ -9,8 +9,7 @@ pub struct HashStore {
 }
 
 impl HashStore {
-    pub fn create(dir: &Path) -> io::Result<HashStore>
-    {
+    pub fn create(dir: &Path) -> io::Result<HashStore> {
         match fs::create_dir(dir) {
             Ok(()) => {}
             Err(e) => {
@@ -27,16 +26,14 @@ impl HashStore {
         HashStore::open(dir)
     }
 
-    pub fn open(dir: &Path) -> io::Result<HashStore>
-    {
+    pub fn open(dir: &Path) -> io::Result<HashStore> {
         match fs::read_dir(dir) {
             Err(e) => Err(e),
             Ok(_) => Ok(HashStore { dir: dir.to_owned() }),
         }
     }
 
-    pub fn hash_inserter(&self) -> io::Result<HashInserter>
-    {
+    pub fn hash_inserter(&self) -> io::Result<HashInserter> {
         HashInserter::init(self.dir.as_path())
     }
 }
@@ -49,8 +46,7 @@ pub struct HashInserter<'a> {
 }
 
 impl<'a> HashInserter<'a> {
-    fn init(dir: &'a Path) -> io::Result<HashInserter>
-    {
+    fn init(dir: &'a Path) -> io::Result<HashInserter> {
         use unival::UniqueValue;
 
         let mut pb = PathBuf::new();
@@ -66,8 +62,7 @@ impl<'a> HashInserter<'a> {
         })
     }
 
-    pub fn commit(self) -> io::Result<Hash>
-    {
+    pub fn commit(self) -> io::Result<Hash> {
         let (hash, _) = try!(self.spool.finish());
 
         let mut outpath = PathBuf::new();
@@ -81,13 +76,11 @@ impl<'a> HashInserter<'a> {
 }
 
 impl<'a> io::Write for HashInserter<'a> {
-    fn write(&mut self, buf: &[u8]) -> io::Result<usize>
-    {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         self.spool.write(buf)
     }
 
-    fn flush(&mut self) -> io::Result<()>
-    {
+    fn flush(&mut self) -> io::Result<()> {
         self.spool.flush()
     }
 }

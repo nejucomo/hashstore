@@ -9,8 +9,7 @@ pub struct HashSpool {
 }
 
 impl HashSpool {
-    pub fn create(path: &Path) -> io::Result<HashSpool>
-    {
+    pub fn create(path: &Path) -> io::Result<HashSpool> {
         /* FIXME: Does this OpenOptions ensure seekable? */
         let f =
             try!(fs::OpenOptions::new()
@@ -22,8 +21,7 @@ impl HashSpool {
         Ok(HashSpool { f: f, hasher: Hasher::new() })
     }
 
-    pub fn finish(mut self) -> io::Result<(Hash, fs::File)>
-    {
+    pub fn finish(mut self) -> io::Result<(Hash, fs::File)> {
         use std::io::{Seek, SeekFrom, Write};
 
         try!(self.flush());
@@ -36,15 +34,13 @@ impl HashSpool {
 }
 
 impl io::Write for HashSpool {
-    fn write(&mut self, buf: &[u8]) -> io::Result<usize>
-    {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         let s = try!(self.f.write(buf));
         self.hasher.update(&buf[0..s]);
         Ok(s)
     }
 
-    fn flush(&mut self) -> io::Result<()>
-    {
+    fn flush(&mut self) -> io::Result<()> {
         self.f.flush()
     }
 }

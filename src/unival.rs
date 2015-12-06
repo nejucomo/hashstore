@@ -15,8 +15,7 @@ const TOKEN_BYTES: usize = 32;
 pub struct UniqueValue([u8; TOKEN_BYTES]);
 
 impl UniqueValue {
-    pub fn generate() -> io::Result<UniqueValue>
-    {
+    pub fn generate() -> io::Result<UniqueValue> {
         use std::fs;
         use std::io::Read;
 
@@ -37,8 +36,7 @@ impl UniqueValue {
         }
     }
 
-    pub fn encoded(&self) -> String
-    {
+    pub fn encoded(&self) -> String {
         use b64::ToB64;
 
         self.0.to_b64()
