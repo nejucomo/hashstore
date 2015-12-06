@@ -12,3 +12,9 @@ mod hash;
 mod hashspool;
 mod hashstore;
 mod unival;
+
+/* Library Public API: */
+pub use hashstore::{
+    HashInserter,
+    HashStore,
+};
