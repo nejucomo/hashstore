@@ -122,6 +122,21 @@ mod tests {
 
             assert!(res.is_err());
             assert!(res.err().unwrap().kind() == io::ErrorKind::NotFound);
+        };
+
+        insert_empty |path: &Path| {
+            use std::fs;
+            use hashstore::HashStore;
+            use testval::EMPTY_HASH_ENC;
+
+            let hs = res_unwrap!(HashStore::create(path));
+            let ins = res_unwrap!(hs.hash_inserter());
+            let hashenc = res_unwrap!(ins.commit()).encoded();
+            assert_eq!(EMPTY_HASH_ENC, hashenc);
+
+            let mut pb = path.to_path_buf();
+            pb.push(EMPTY_HASH_ENC);
+            assert!(res_unwrap!(fs::metadata(pb)).is_file());
         }
     }
 }

@@ -66,8 +66,10 @@ mod tests {
 
         #[test]
         fn empty() {
+            use testval::EMPTY_HASH_ENC;
+
             let henc = Hasher::new().finalize().encoded();
-            assert_eq!("DldRwCblQ7Loqy6wYJnaodHl30d3j3eH-qtFzfEv46g", henc);
+            assert_eq!(EMPTY_HASH_ENC, henc);
         }
 
         #[test]

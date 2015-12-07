@@ -7,6 +7,9 @@ extern crate blake2_rfc;
 #[macro_use]
 mod testutils;
 
+#[cfg(test)]
+mod testval;
+
 mod b64;
 mod hash;
 mod hashspool;
