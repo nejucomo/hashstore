@@ -1,0 +1,26 @@
+[root]
+name = "dagao"
+version = "0.1.0"
+dependencies = [
+ "blake2-rfc 0.2.17 (git+https://github.com/cesarb/blake2-rfc)",
+ "rustc-serialize 0.3.19 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "blake2-rfc"
+version = "0.2.17"
+source = "git+https://github.com/cesarb/blake2-rfc#6c4279bdc66d6c14b32ecf2d7ac78391cd001f21"
+dependencies = [
+ "constant_time_eq 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "constant_time_eq"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "rustc-serialize"
+version = "0.3.19"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
