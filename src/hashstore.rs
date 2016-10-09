@@ -31,7 +31,7 @@ impl HashStore {
         }
     }
 
-    pub fn hash_inserter(&self) -> io::Result<HashInserter> {
+    pub fn open_inserter(&self) -> io::Result<HashInserter> {
         HashInserter::init(self.dir.as_path())
     }
 }
@@ -128,7 +128,7 @@ mod tests {
             use testval::EMPTY_HASH_ENC;
 
             let hs = res_unwrap!(HashStore::create(path));
-            let ins = res_unwrap!(hs.hash_inserter());
+            let ins = res_unwrap!(hs.open_inserter());
             let hashenc = res_unwrap!(ins.commit()).encoded();
             assert_eq!(EMPTY_HASH_ENC, hashenc);
 
