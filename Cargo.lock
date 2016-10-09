@@ -1,5 +1,5 @@
 [root]
-name = "dagao"
+name = "hashstore"
 version = "0.1.0"
 dependencies = [
  "blake2-rfc 0.2.17 (git+https://github.com/cesarb/blake2-rfc)",

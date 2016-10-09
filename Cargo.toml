@@ -1,5 +1,5 @@
 [package]
-name = "dagao"
+name = "hashstore"
 version = "0.1.0"
 authors = ["Nathan Wilcox <nejucomo@gmail.com>"]
 
