@@ -1,7 +1,7 @@
 use blake2_rfc::blake2b::Blake2b;
 
 
-const HASH_BYTES: usize = 32;
+const HASH_BYTES: usize = 16;
 
 
 pub struct Hash([u8; HASH_BYTES]);
@@ -52,7 +52,7 @@ mod tests {
         fn encoded() {
             let h = Hash([7; HASH_BYTES]);
             let enc = h.encoded();
-            assert_eq!("BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc", enc);
+            assert_eq!("BwcHBwcHBwcHBwcHBwcHBw", enc);
         }
     }
 
@@ -76,7 +76,7 @@ mod tests {
             let mut hasher = Hasher::new();
             hasher.update(b"Hello World!");
             let henc = hasher.finalize().encoded();
-            assert_eq!("v1bAco_U6c9kv69tq6uBVUEDKYze5cxNWAQzqiXpiwA", henc);
+            assert_eq!("Gj88HM-a6ffnU1yUY7Bq_w", henc);
         }
     }
 }
