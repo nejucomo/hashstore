@@ -10,15 +10,17 @@ pub struct HashSpool {
 
 impl HashSpool {
     pub fn create(path: &Path) -> io::Result<HashSpool> {
-        /* FIXME: Does this OpenOptions ensure seekable? */
-        let f =
-            try!(fs::OpenOptions::new()
-                 .create(true)
-                 .write(true)
-                 .read(true)
-                 .open(path));
+        // FIXME: Does this OpenOptions ensure seekable?
+        let f = try!(fs::OpenOptions::new()
+            .create(true)
+            .write(true)
+            .read(true)
+            .open(path));
 
-        Ok(HashSpool { f: f, hasher: Hasher::new() })
+        Ok(HashSpool {
+            f: f,
+            hasher: Hasher::new(),
+        })
     }
 
     pub fn finish(mut self) -> io::Result<(Hash, fs::File)> {

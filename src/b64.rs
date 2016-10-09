@@ -1,9 +1,8 @@
 use serialize::base64::{CharacterSet, Config, Newline, ToBase64};
 
 
-/* Like ToBase64 but hardwired with our preferred format: url safe,
- * no whitespace, no padding.
- */
+// Like ToBase64 but hardwired with our preferred format: url safe,
+// no whitespace, no padding.
 pub trait ToB64 {
     fn to_b64(&self) -> String;
 }

@@ -1,11 +1,10 @@
-/* A Token is a high-entropy value, large enough to be resistant to
- * birthday attack collisions. They may be randomly generated, the output
- * of secure hashes, and used as symmetric cipher keys.
- *
- * This abstracts away size, encoding, and constant time comparison from
- * application code. This is not a user abstraction boundary, since
- * encoding and size and user-facing.
- */
+// A Token is a high-entropy value, large enough to be resistant to
+// birthday attack collisions. They may be randomly generated, the output
+// of secure hashes, and used as symmetric cipher keys.
+//
+// This abstracts away size, encoding, and constant time comparison from
+// application code. This is not a user abstraction boundary, since
+// encoding and size and user-facing.
 use std::io;
 
 
@@ -26,13 +25,8 @@ impl UniqueValue {
         if n == TOKEN_BYTES {
             Ok(UniqueValue(bytes))
         } else {
-            Err(
-                io::Error::new(
-                    io::ErrorKind::InvalidData,
-                    format!(
-                        "short urandom read: wanted {}, got {}",
-                        TOKEN_BYTES,
-                        n)))
+            Err(io::Error::new(io::ErrorKind::InvalidData,
+                               format!("short urandom read: wanted {}, got {}", TOKEN_BYTES, n)))
         }
     }
 

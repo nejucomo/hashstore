@@ -16,9 +16,6 @@ mod hashspool;
 mod hashstore;
 mod unival;
 
-/* Library Public API: */
+// Library Public API:
 #[cfg(not(test))]
-pub use hashstore::{
-    HashInserter,
-    HashStore,
-};
+pub use hashstore::{HashInserter, HashStore};

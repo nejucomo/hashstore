@@ -60,9 +60,8 @@ mod tests {
     mod Hasher {
         use hash::Hasher;
 
-        /* FIXME: Verify test vectors against the reference implementation
-         * of blake2.
-         */
+        // FIXME: Verify test vectors against the reference implementation
+        // of blake2.
 
         #[test]
         fn empty() {

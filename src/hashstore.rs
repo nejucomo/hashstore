@@ -15,11 +15,9 @@ impl HashStore {
             Err(e) => {
                 match e.kind() {
                     io::ErrorKind::AlreadyExists => {
-                        /* Fine, no problem. */
+                        // Fine, no problem.
                     }
-                    _ => {
-                        return Err(e)
-                    }
+                    _ => return Err(e),
                 }
             }
         }
