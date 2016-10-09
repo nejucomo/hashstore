@@ -34,6 +34,12 @@ impl HashStore {
     pub fn open_inserter(&self) -> io::Result<HashInserter> {
         HashInserter::init(self.dir.as_path())
     }
+
+    pub fn open_reader(&self, hash: Hash) -> io::Result<fs::File> {
+        let mut pb = self.dir.clone();
+        pb.push(hash.encoded());
+        fs::File::open(pb)
+    }
 }
 
 
@@ -124,17 +130,24 @@ mod tests {
 
         insert_empty |path: &Path| {
             use std::fs;
+            use std::io::Read;
             use hashstore::HashStore;
             use testval::EMPTY_HASH_ENC;
 
             let hs = res_unwrap!(HashStore::create(path));
             let ins = res_unwrap!(hs.open_inserter());
-            let hashenc = res_unwrap!(ins.commit()).encoded();
-            assert_eq!(EMPTY_HASH_ENC, hashenc);
+            let hash = res_unwrap!(ins.commit());
+            assert_eq!(EMPTY_HASH_ENC, hash.encoded());
 
             let mut pb = path.to_path_buf();
             pb.push(EMPTY_HASH_ENC);
             assert!(res_unwrap!(fs::metadata(pb)).is_file());
+
+            let mut f = res_unwrap!(hs.open_reader(hash));
+            let mut contents = String::new();
+            let readlen = res_unwrap!(f.read_to_string(&mut contents));
+            assert_eq!(0, readlen);
+            assert_eq!("", contents);
         }
     }
 }
