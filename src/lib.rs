@@ -18,4 +18,5 @@ mod unival;
 
 // Library Public API:
 #[cfg(not(test))]
+pub use hash::{Hash, Hasher};
 pub use hashstore::{HashInserter, HashStore};
