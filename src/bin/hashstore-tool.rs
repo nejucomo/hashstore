@@ -1,9 +1,8 @@
 extern crate clap;
 extern crate hashstore;
 
-use clap::{App, SubCommand};
-use hashstore::Hasher;
-// use hashstore::HashStore;
+use clap::{Arg, ArgMatches, App, SubCommand};
+use hashstore::{Hasher, HashStore};
 
 
 fn main() {
@@ -13,35 +12,91 @@ fn main() {
         .about("Read/Insert into hashstore")
         .subcommand(SubCommand::with_name("hash")
             .about("Writes to stdout the hash encoding of stdin."))
+        .subcommand(SubCommand::with_name("insert")
+            .about("Insert data from stdin into hashstore; print hash on stdout.")
+            .arg(Arg::with_name("dir")
+                .short("d")
+                .value_name("STORE")
+                .help("Hashstore directory.")))
+        .subcommand(SubCommand::with_name("read")
+            .about("Write entry HASH to stdout.")
+            .arg(Arg::with_name("dir")
+                .short("d")
+                .value_name("STORE")
+                .help("Hashstore directory."))
+            .arg(Arg::with_name("HASH")
+                .help("Entry to read.")
+                .required(true)))
         .get_matches();
 
     match matches.subcommand() {
         ("hash", _) => {
-            use std::io::Read;
-
-            let mut buf = [0u8; 0x1000];
-            let mut h = Hasher::new();
-            let mut stdin = std::io::stdin();
-
-            let mut res = stdin.read(&mut buf);
-            loop {
-                match res {
-                    Ok(n) if n == 0 => break,
-
-                    Ok(n) => h.update(&buf[..n]),
-
-                    Err(e) => {
-                        println!("Error: {}", e);
-                        std::process::exit(1);
-                    }
-                }
-                res = stdin.read(&mut buf);
-            }
-
-            println!("{}", h.finalize().encoded());
+            cmd_hash();
         }
+        ("insert", Some(subm)) => {
+            cmd_insert(subm);
+        }
+        // ("read", Some(subm)) => {
+        // cmd_read(subm);
+        // }
+        //
         _ => {
-            // error
+            unreachable!("clap arg parsing postcondition failure.");
         }
     }
+}
+
+
+fn cmd_hash() {
+    use std::io::Read;
+
+    let mut h = Hasher::new();
+    let mut stdin = std::io::stdin();
+    let mut buf = [0u8; 0x1000];
+
+    loop {
+        match stdin.read(&mut buf) {
+            Ok(n) if n == 0 => break,
+
+            Ok(n) => h.update(&buf[..n]),
+
+            Err(e) => {
+                println!("Error: {}", e);
+                std::process::exit(1);
+            }
+        }
+    }
+
+    println!("{}", h.finalize().encoded());
+}
+
+
+fn cmd_insert<'a>(m: &ArgMatches<'a>) {
+    use std::io::Read;
+
+    let dir = m.value_of("STORE").unwrap_or(&".");
+    let hs = HashStore::open(std::path::Path::new(dir)).unwrap();
+    let mut inserter = hs.open_inserter().unwrap();
+    let mut stdin = std::io::stdin();
+    let mut buf = [0u8; 0x1000];
+
+    loop {
+        match stdin.read(&mut buf) {
+            Ok(n) if n == 0 => break,
+
+            Ok(n) => {
+                use std::io::Write;
+
+                let n2 = inserter.write(&buf[..n]).unwrap();
+                assert_eq!(n, n2);
+            }
+
+            Err(e) => {
+                println!("Error: {}", e);
+                std::process::exit(1);
+            }
+        }
+    }
+
+    println!("{}", inserter.commit().unwrap().encoded());
 }
