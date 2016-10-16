@@ -6,6 +6,15 @@ use hashstore::{Hasher, HashStore};
 
 
 fn main() {
+    let make_dirarg = || {
+        Arg::with_name("STORE")
+            .long("dir")
+            .short("d")
+            .value_name("STORE")
+            .takes_value(true)
+            .help("Hashstore directory.")
+    };
+
     let matches = App::new("hashstore-tool")
         .version("0.1")
         .author("Nathan Wilcox <nejucomo@gmail.com>")
@@ -14,16 +23,10 @@ fn main() {
             .about("Writes to stdout the hash encoding of stdin."))
         .subcommand(SubCommand::with_name("insert")
             .about("Insert data from stdin into hashstore; print hash on stdout.")
-            .arg(Arg::with_name("dir")
-                .short("d")
-                .value_name("STORE")
-                .help("Hashstore directory.")))
+            .arg(make_dirarg()))
         .subcommand(SubCommand::with_name("read")
             .about("Write entry HASH to stdout.")
-            .arg(Arg::with_name("dir")
-                .short("d")
-                .value_name("STORE")
-                .help("Hashstore directory."))
+            .arg(make_dirarg())
             .arg(Arg::with_name("HASH")
                 .help("Entry to read.")
                 .required(true)))
