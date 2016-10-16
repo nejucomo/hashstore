@@ -7,7 +7,18 @@ const HASH_BYTES: usize = 16;
 pub struct Hash([u8; HASH_BYTES]);
 
 
+#[derive(Debug)]
+pub enum HashDecodeError {
+    InvalidLength(usize),
+    InvalidBase64Byte(u8, usize),
+}
+
+
 impl Hash {
+    pub fn decode(_s: &str) -> Result<Hash, HashDecodeError> {
+        unimplemented!()
+    }
+
     pub fn encoded(&self) -> String {
         use b64::ToB64;
 

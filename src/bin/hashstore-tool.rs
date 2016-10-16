@@ -30,16 +30,9 @@ fn main() {
         .get_matches();
 
     match matches.subcommand() {
-        ("hash", _) => {
-            cmd_hash();
-        }
-        ("insert", Some(subm)) => {
-            cmd_insert(subm);
-        }
-        // ("read", Some(subm)) => {
-        // cmd_read(subm);
-        // }
-        //
+        ("hash", _) => cmd_hash(),
+        ("insert", Some(subm)) => cmd_insert(subm),
+        ("read", Some(subm)) => cmd_read(subm),
         _ => {
             unreachable!("clap arg parsing postcondition failure.");
         }
@@ -99,4 +92,37 @@ fn cmd_insert<'a>(m: &ArgMatches<'a>) {
     }
 
     println!("{}", inserter.commit().unwrap().encoded());
+}
+
+
+fn cmd_read<'a>(m: &ArgMatches<'a>) {
+    use std::io::Read;
+    use hashstore::Hash;
+
+    let dir = m.value_of("STORE").unwrap_or(&".");
+    let hs = HashStore::open(std::path::Path::new(dir)).unwrap();
+    let hash = Hash::decode(m.value_of("HASH").unwrap()).unwrap();
+    let mut reader = hs.open_reader(hash).unwrap();
+    let mut stdout = std::io::stdout();
+    let mut buf = [0u8; 0x1000];
+
+    loop {
+        match reader.read(&mut buf) {
+            Ok(n) if n == 0 => break,
+
+            Ok(n) => {
+                use std::io::Write;
+
+                let mut i = 0;
+                while i < n {
+                    i += stdout.write(&buf[i..n]).unwrap();
+                }
+            }
+
+            Err(e) => {
+                println!("Error: {}", e);
+                std::process::exit(1);
+            }
+        }
+    }
 }
