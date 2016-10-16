@@ -51,15 +51,9 @@ fn cmd_hash() {
     let mut buf = [0u8; 0x1000];
 
     loop {
-        match stdin.read(&mut buf) {
-            Ok(n) if n == 0 => break,
-
-            Ok(n) => h.update(&buf[..n]),
-
-            Err(e) => {
-                println!("Error: {}", e);
-                std::process::exit(1);
-            }
+        match stdin.read(&mut buf).unwrap() {
+            0 => break,
+            n => h.update(&buf[..n]),
         }
     }
 
@@ -77,19 +71,13 @@ fn cmd_insert<'a>(m: &ArgMatches<'a>) {
     let mut buf = [0u8; 0x1000];
 
     loop {
-        match stdin.read(&mut buf) {
-            Ok(n) if n == 0 => break,
-
-            Ok(n) => {
+        match stdin.read(&mut buf).unwrap() {
+            0 => break,
+            n => {
                 use std::io::Write;
 
                 let n2 = inserter.write(&buf[..n]).unwrap();
                 assert_eq!(n, n2);
-            }
-
-            Err(e) => {
-                println!("Error: {}", e);
-                std::process::exit(1);
             }
         }
     }
