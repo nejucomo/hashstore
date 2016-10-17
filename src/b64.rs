@@ -1,4 +1,6 @@
-use serialize::base64::{CharacterSet, Config, Newline, ToBase64, FromBase64, FromBase64Error};
+pub use serialize::base64::FromBase64Error;
+
+use serialize::base64::{CharacterSet, Config, Newline, ToBase64, FromBase64};
 
 
 // Like ToBase64 but hardwired with our preferred format: url safe,
