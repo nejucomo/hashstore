@@ -35,10 +35,20 @@ impl HashStore {
         HashInserter::init(self.dir.as_path())
     }
 
-    pub fn open_reader(&self, hash: Hash) -> io::Result<fs::File> {
+    pub fn open_reader(&self, hash: &Hash) -> io::Result<fs::File> {
         let mut pb = self.dir.clone();
         pb.push(hash.encoded());
         fs::File::open(pb)
+    }
+
+    pub fn has_hash(&self, hash: &Hash) -> io::Result<bool> {
+        use std::io::ErrorKind;
+
+        match self.open_reader(hash) {
+            Ok(_) => Ok(true),
+            Err(ref e) if e.kind() == ErrorKind::NotFound => Ok(false),
+            Err(e) => Err(e),
+        }
     }
 }
 
@@ -143,11 +153,13 @@ mod tests {
             pb.push(EMPTY_HASH_ENC);
             assert!(res_unwrap!(fs::metadata(pb)).is_file());
 
-            let mut f = res_unwrap!(hs.open_reader(hash));
+            let mut f = res_unwrap!(hs.open_reader(&hash));
             let mut contents = String::new();
             let readlen = res_unwrap!(f.read_to_string(&mut contents));
             assert_eq!(0, readlen);
             assert_eq!("", contents);
+
+            assert!(res_unwrap!(hs.has_hash(&hash)));
         }
     }
 }

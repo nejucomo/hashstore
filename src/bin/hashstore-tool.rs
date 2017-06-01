@@ -93,7 +93,7 @@ fn cmd_read<'a>(m: &ArgMatches<'a>) {
     let dir = m.value_of("STORE").unwrap_or(&".");
     let hs = HashStore::open(std::path::Path::new(dir)).unwrap();
     let hash = Hash::decode(m.value_of("HASH").unwrap()).unwrap();
-    let mut reader = hs.open_reader(hash).unwrap();
+    let mut reader = hs.open_reader(&hash).unwrap();
     let mut stdout = std::io::stdout();
     let mut buf = [0u8; 0x1000];
 
