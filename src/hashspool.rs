@@ -53,11 +53,11 @@ mod tests {
     tests_with_fs! {
         empty_spool |testpath| {
             use hashspool::HashSpool;
-            use testval::EMPTY_HASH_ENC;
+            use EMPTY_HASH;
 
             let spool = res_unwrap!(HashSpool::create(testpath));
             let (hash, _) = res_unwrap!(spool.finish());
-            assert_eq!(EMPTY_HASH_ENC, hash.encoded());
+            assert_eq!(EMPTY_HASH, hash.encoded());
         }
     }
 }

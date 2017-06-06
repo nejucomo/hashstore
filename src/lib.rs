@@ -7,9 +7,6 @@ extern crate blake2_rfc;
 #[macro_use]
 mod testutils;
 
-#[cfg(test)]
-mod testval;
-
 mod b64;
 mod hash;
 mod hashspool;
@@ -21,3 +18,5 @@ mod unival;
 pub use hash::{Hash, Hasher};
 pub use hashstore::{HashInserter, HashStore};
 pub use unival::UniqueValue;
+
+pub const EMPTY_HASH: &'static str = "yuZpQdnvvUBOTYh1jqZ2cA";

@@ -138,10 +138,10 @@ mod tests {
 
         #[test]
         fn empty() {
-            use testval::EMPTY_HASH_ENC;
+            use EMPTY_HASH;
 
             let henc = Hasher::new().finalize().encoded();
-            assert_eq!(EMPTY_HASH_ENC, henc);
+            assert_eq!(EMPTY_HASH, henc);
         }
 
         #[test]

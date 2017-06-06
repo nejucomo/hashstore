@@ -142,15 +142,15 @@ mod tests {
             use std::fs;
             use std::io::Read;
             use hashstore::HashStore;
-            use testval::EMPTY_HASH_ENC;
+            use EMPTY_HASH;
 
             let hs = res_unwrap!(HashStore::create(path));
             let ins = res_unwrap!(hs.open_inserter());
             let hash = res_unwrap!(ins.commit());
-            assert_eq!(EMPTY_HASH_ENC, hash.encoded());
+            assert_eq!(EMPTY_HASH, hash.encoded());
 
             let mut pb = path.to_path_buf();
-            pb.push(EMPTY_HASH_ENC);
+            pb.push(EMPTY_HASH);
             assert!(res_unwrap!(fs::metadata(pb)).is_file());
 
             let mut f = res_unwrap!(hs.open_reader(&hash));
