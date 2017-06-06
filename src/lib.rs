@@ -20,3 +20,4 @@ mod unival;
 #[cfg(not(test))]
 pub use hash::{Hash, Hasher};
 pub use hashstore::{HashInserter, HashStore};
+pub use unival::UniqueValue;
