@@ -7,7 +7,7 @@ extern crate blake2_rfc;
 #[macro_use]
 mod testutils;
 
-mod b64;
+pub mod b64;
 mod hash;
 mod hashspool;
 mod hashstore;
