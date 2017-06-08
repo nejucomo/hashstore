@@ -14,6 +14,14 @@ pub enum HashDecodeError {
 
 
 impl Hash {
+    pub fn wrap_bytes(bytes: [u8; HASH_BYTES]) -> Hash {
+        Hash(bytes)
+    }
+
+    pub fn peek_bytes(&self) -> &[u8; HASH_BYTES] {
+        &self.0
+    }
+
     pub fn decode(s: &str) -> Result<Hash, HashDecodeError> {
         use b64::{FromB64, FromBase64Error};
 
