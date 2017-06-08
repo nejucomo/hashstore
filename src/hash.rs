@@ -1,8 +1,7 @@
 use blake2_rfc::blake2b::Blake2b;
 
 
-const HASH_BYTES: usize = 16;
-
+pub const HASH_BYTES: usize = 16;
 
 pub struct Hash([u8; HASH_BYTES]);
 
