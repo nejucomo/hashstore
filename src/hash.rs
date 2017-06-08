@@ -1,7 +1,7 @@
 use blake2_rfc::blake2b::Blake2b;
 
 
-pub const HASH_BYTES: usize = 16;
+pub const HASH_BYTES: usize = 32;
 
 pub struct Hash([u8; HASH_BYTES]);
 
@@ -101,7 +101,7 @@ mod tests {
     mod Hash_type {
         use hash::{HASH_BYTES, Hash, HashDecodeError};
         const SEVENS_HASH: Hash = Hash([7; HASH_BYTES]);
-        const SEVENS_ENC: &'static str = "BwcHBwcHBwcHBwcHBwcHBw";
+        const SEVENS_ENC: &'static str = "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc";
 
         #[test]
         fn encoded() {
@@ -122,7 +122,7 @@ mod tests {
 
         #[test]
         fn decode_bad_byte() {
-            let junk = "BwcHBwcH*wcHBwcHBwcHBw";
+            let junk = "BwcHBwcH*wcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc";
             assert_eq!(Err(HashDecodeError::InvalidBase64Byte(b'*', 8)),
                        Hash::decode(junk));
         }
@@ -148,7 +148,7 @@ mod tests {
             let mut hasher = Hasher::new();
             hasher.update(b"Hello World!");
             let henc = hasher.finalize().encoded();
-            assert_eq!("Gj88HM-a6ffnU1yUY7Bq_w", henc);
+            assert_eq!("v1bAco_U6c9kv69tq6uBVUEDKYze5cxNWAQzqiXpiwA", henc);
         }
     }
 }

@@ -19,4 +19,4 @@ pub use hash::{Hash, Hasher};
 pub use hashstore::{HashInserter, HashStore};
 pub use unival::UniqueValue;
 
-pub const EMPTY_HASH: &'static str = "yuZpQdnvvUBOTYh1jqZ2cA";
+pub const EMPTY_HASH: &'static str = "DldRwCblQ7Loqy6wYJnaodHl30d3j3eH-qtFzfEv46g";
