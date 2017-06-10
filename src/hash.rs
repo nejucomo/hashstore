@@ -1,8 +1,11 @@
+use std::fmt;
 use blake2_rfc::blake2b::Blake2b;
 
 
 pub const HASH_BYTES: usize = 32;
 
+
+#[derive(PartialEq)]
 pub struct Hash([u8; HASH_BYTES]);
 
 
@@ -61,6 +64,12 @@ impl Hash {
 }
 
 
+impl fmt::Debug for Hash {
+    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        write!(f, "Hash [{}]", self.encoded())
+    }
+}
+
 pub struct Hasher(Blake2b);
 
 impl Hasher {
@@ -89,22 +98,6 @@ impl Hasher {
 
 #[cfg(test)]
 mod tests {
-    use hash::Hash;
-    use std::fmt;
-
-    // PartialEq and Debug only for testing:
-    impl PartialEq for Hash {
-        fn eq(&self, other: &Hash) -> bool {
-            self.0 == other.0
-        }
-    }
-
-    impl fmt::Debug for Hash {
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            write!(f, "Hash:{}", self.encoded())
-        }
-    }
-
     #[allow(non_snake_case)]
     mod Hash_type {
         use hash::{HASH_BYTES, Hash, HashDecodeError};
