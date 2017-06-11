@@ -32,7 +32,7 @@ impl HashStore {
     }
 
     pub fn open_inserter(&self) -> io::Result<HashInserter> {
-        HashInserter::init(self.dir.as_path())
+        HashInserter::init(self.dir.clone())
     }
 
     pub fn open_reader(&self, hash: &Hash) -> io::Result<fs::File> {
@@ -53,18 +53,18 @@ impl HashStore {
 }
 
 
-pub struct HashInserter<'a> {
-    dir: &'a Path,
+pub struct HashInserter {
+    dir: PathBuf,
     inpath: PathBuf,
     spool: HashSpool,
 }
 
-impl<'a> HashInserter<'a> {
-    fn init(dir: &'a Path) -> io::Result<HashInserter> {
+impl HashInserter {
+    fn init(dir: PathBuf) -> io::Result<HashInserter> {
         use unival::UniqueValue;
 
         let mut pb = PathBuf::new();
-        pb.push(dir);
+        pb.push(dir.as_path());
         pb.push(format!("in.{}", try!(UniqueValue::generate()).encoded()));
 
         let spool = try!(HashSpool::create(pb.as_path()));
@@ -80,7 +80,7 @@ impl<'a> HashInserter<'a> {
         let (hash, _) = try!(self.spool.finish());
 
         let mut outpath = PathBuf::new();
-        outpath.push(self.dir);
+        outpath.push(self.dir.as_path());
         outpath.push(hash.encoded());
 
         try!(fs::rename(self.inpath.as_path(), outpath.as_path()));
@@ -89,7 +89,7 @@ impl<'a> HashInserter<'a> {
     }
 }
 
-impl<'a> io::Write for HashInserter<'a> {
+impl io::Write for HashInserter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         self.spool.write(buf)
     }
