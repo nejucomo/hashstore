@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt, io};
 use blake2_rfc::blake2b::Blake2b;
 
 
@@ -96,10 +96,22 @@ impl Hasher {
 }
 
 
+impl io::Write for Hasher {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        self.update(buf);
+        Ok(buf.len())
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
+}
+
+
 #[cfg(test)]
 mod tests {
     #[allow(non_snake_case)]
-    mod Hash_type {
+    mod Hash {
         use hash::{HASH_BYTES, Hash, HashDecodeError};
         const SEVENS_HASH: Hash = Hash([7; HASH_BYTES]);
         const SEVENS_ENC: &'static str = "BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc";
@@ -146,10 +158,23 @@ mod tests {
 
         #[test]
         fn hello_world() {
-            let mut hasher = Hasher::new();
-            hasher.update(b"Hello World!");
-            let henc = hasher.finalize().encoded();
-            assert_eq!("v1bAco_U6c9kv69tq6uBVUEDKYze5cxNWAQzqiXpiwA", henc);
+            let mut hashers = vec![Hasher::new(), Hasher::new()];
+
+            // Use the 'direct API':
+            hashers[0].update(b"Hello World!");
+
+            // Use the Write API:
+            {
+                use std::io::Write;
+
+                res_unwrap!(hashers[1].write_all(b"Hello World!"));
+                res_unwrap!(hashers[1].flush());
+            }
+
+            for h in hashers {
+                let henc = h.finalize().encoded();
+                assert_eq!("v1bAco_U6c9kv69tq6uBVUEDKYze5cxNWAQzqiXpiwA", henc);
+            }
         }
     }
 }
