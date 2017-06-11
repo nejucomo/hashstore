@@ -1,4 +1,4 @@
-#[deny(warnings)]
+#![deny(warnings)]
 
 extern crate rustc_serialize as serialize;
 extern crate blake2_rfc;
